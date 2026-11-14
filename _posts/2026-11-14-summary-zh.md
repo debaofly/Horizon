@@ -5,168 +5,135 @@ date: 2026-11-14
 lang: zh
 ---
 
-> 从 41 条内容中筛选出 11 条重要资讯。
+> 从 39 条内容中筛选出 10 条重要资讯。
 
 ---
 
 **科技新闻**
-1. [TorchTitan 在 384 块 GH200 上训练 1T MoE](#item-tech-news-1) ⭐️ 8.0/10
-2. [Orcas Airband：GPU 实时转写 KORS 航空波段](#item-tech-news-2) ⭐️ 7.0/10
-3. [FAA 发布全国航班地面停飞令，数小时后解除](#item-tech-news-3) ⭐️ 7.0/10
-4. [Haskell 生态技术愿景文档引发讨论](#item-tech-news-4) ⭐️ 7.0/10
-5. [Python 早期贡献者 Tim Peters 去世，享年 74 岁](#item-tech-news-5) ⭐️ 7.0/10
-6. [微软 Outlook、Teams 与 Copilot 全球宕机逾 12 小时](#item-tech-news-6) ⭐️ 7.0/10
-7. [DeepSeek 开放应用 API：多项能力可单独调用](#item-tech-news-7) ⭐️ 7.0/10
-8. [OpenAI 推出 ChatGPT Wallet，支持智能体令牌化支付](#item-tech-news-8) ⭐️ 7.0/10
+1. [TorchTitan 在 384 块 GH200 上训练 1T 参数 MoE](#item-tech-news-1) ⭐️ 8.0/10
+2. [上海通报交大医学院基因编辑事件调查结果](#item-tech-news-2) ⭐️ 8.0/10
+3. [FAA 发布全国停飞令，故障原因仍未确认](#item-tech-news-3) ⭐️ 7.0/10
+4. [ICML 2027 拟推两阶段审稿与投稿配额](#item-tech-news-4) ⭐️ 7.0/10
+5. [微软 Outlook、Teams 与 Copilot 全球宕机逾 12 小时](#item-tech-news-5) ⭐️ 7.0/10
+6. [DeepSeek 开放应用 API，整合搜索、文件与语音](#item-tech-news-6) ⭐️ 7.0/10
+7. [OpenAI 推出 ChatGPT Wallet，支持美国 Pro 用户智能体支付](#item-tech-news-7) ⭐️ 7.0/10
 
 **财经新闻**
-1. [卢特尼克之子执掌的坎托削减英伟达持股近半，引发利益冲突质疑](#item-finance-news-1) ⭐️ 8.0/10
-2. [芝加哥联储主席古尔斯比：通胀问题上美联储“肯定还有工作要做”](#item-finance-news-2) ⭐️ 7.0/10
-3. [黄仁勋辞职与涉华间谍指控或加剧美中出口管制紧张](#item-finance-news-3) ⭐️ 7.0/10
+1. [卢特尼克因英伟达芯片走私审查受质疑，其子领导公司申报持股近减半](#item-finance-news-1) ⭐️ 8.0/10
+2. [芝加哥联储古尔斯比：美联储在通胀问题上“肯定还有工作要做”](#item-finance-news-2) ⭐️ 7.0/10
+3. [黄仁勋辞职引发美中芯片管制收紧担忧](#item-finance-news-3) ⭐️ 7.0/10
 
 ---
 
 ## 科技新闻
 
 <a id="item-tech-news-1"></a>
-### [TorchTitan 在 384 块 GH200 上训练 1T MoE](https://www.reddit.com/r/MachineLearning/comments/1xvce5h/scaling_to_1t_moe_on_torchtitan_p/) ⭐️ 8.0/10
+### [TorchTitan 在 384 块 GH200 上训练 1T 参数 MoE](https://www.reddit.com/r/MachineLearning/comments/1xvce5h/scaling_to_1t_moe_on_torchtitan_p/) ⭐️ 8.0/10
 
-Reddit 上一则技术帖称，作者与 TorchTitan/PyTorch 维护者合作，在 JUPITER 的 384 块 GH200 上把约 1T 参数 MoE 的训练吞吐做到约 1,300 tokens/s/GPU，较起点提升 14 倍；这是社区经验分享，并非同行评审结果。方案采用 384 路 FSDP 加 4 路专家并行（EP），并将 EP 限制在节点内，同时放弃流水线并行；为支撑 64k token 序列，使用了完整激活检查点、把检查点卸载到 Grace、Muon 优化器以及按完整专家分片的 FlexShard。帖子还报告了把 Newton-Schulz 放到 GPU 执行后优化器步从 42 秒降至约 2 秒、按注意力开销分桶把最慢 rank 从平均的 7.9 倍降到 1.15 倍，以及修正 FSDP2 侧流分配后显存重试归零、吞吐再增 21%。
+一位开发者在 Reddit 报告，其团队使用 TorchTitan 在 JUPITER 的 384 块 GH200 上训练约 1T 参数 MoE，达到约 1,300 tokens/s/GPU，相比最初起点提升 14 倍；这是团队自述结果，尚非独立复现。配置为 384 路 FSDP 加 4 路专家并行（EP），EP 严格限制在节点内，并刻意跳过流水并行（PP）以避免长流水气泡。报告还称，全量激活重计算带来 4 倍提升，GPU 端 Newton-Schulz 将优化器步从 42 秒降到约 2 秒，而按注意力成本分桶把最慢 rank 从平均的 7.9 倍降到 1.15 倍。作者称这些优化让共享 Hopper 集群上的前沿规模训练可行，但完整数据和外部细节在 Domyn/PyTorch 博客中。
 
 reddit · r/MachineLearning · /u/f14-bertolotti · 11月13日 16:28
 
-**「背景」** TorchTitan 是 PyTorch 官方维护的开源大规模训练平台，以原生 PyTorch 的方式把 FSDP、张量并行、流水线并行等分布式技术收敛到同一份可读代码库中；其论文将其定位为统一并推进现有分布式训练技术、减少工程重复的一站式方案（tool-2-1、tool-2-2）。本次实验的对象是 MoE 模型：总参数远超单卡显存，因此必须把稠密权重按 FSDP 切片、把不同专家分派到不同 GPU 上。硬件方面，GH200 是 JUPITER 超算所用的 Hopper 代 GPU，与 Grace CPU 之间有一条约 900 GB/s 的 C2C 链路；帖子中把激活检查点和优化器状态卸载到 CPU、以及在主机侧参数上运行 Newton-Schulz 的做法，都依赖这条链路的带宽。
+**「背景」** TorchTitan 是 PyTorch 面向大规模 LLM 训练的分布式训练框架；FSDP 把参数切片分散到各 rank 并在计算前聚合，EP 则让不同 GPU 持有不同专家、把 token 路由到对应专家。千亿至万亿参数 MoE 通常必须在多种并行方式间取舍，而 GH200 的跨节点 InfiniBand 带宽远低于节点内 NVLink，使通信成为主要约束。
 
-**「影响」** 对使用 FSDP+EP 的团队，最直接的可操作项是按完整专家而非矩阵切片分片，使每个 rank 拥有若干完整专家矩阵并在本地完成 Muon 的 Newton-Schulz，再用 bf16 专家梯度 all-to-all 后本地 fp32 求和，替代会把传输数据升到 fp32 的跨节点 reduce-scatter，从而避免额外 gather 并把梯度流量减半；若遇到 HBM 尚有空闲却触发分配器重试，帖子建议把集合通信临时缓冲移到计算流，相关 FSDP2 开关目前仍是私有标志、正推进成为公开 API。
+**「影响」** 对在类似 InfiniBand 集群上复现的团队，最直接的限制是 EP 的 token all-to-all 必须留在节点内，否则约 25 GB/s 的跨节点带宽会压过计算；报告中的 bf16 专家梯度 all-to-all、FP8 all-gather 和节点内重分片都是围绕这一瓶颈设计的。另一个可操作检查是 FSDP 侧流上的分配器缓存：报告称把临时分配移到计算流并提前释放梯度后，384 个 rank 的分配重试全部消失、峰值保留内存减少 13.5 GiB。
 
-<details><summary>参考链接</summary>
-<ul>
-<li><a href="https://github.com/pytorch/torchtitan">GitHub - pytorch / torchtitan : A PyTorch native platform for training ...</a></li>
-<li><a href="https://arxiv.org/pdf/2410.06511">TorchTitan : One-stop PyTorch native solution for production ready...</a></li>
-
-</ul>
-</details>
-
-**标签**: `#MoE`, `#TorchTitan`, `#distributed training`, `#PyTorch`, `#GH200`
+**标签**: `#distributed training`, `#Mixture-of-Experts`, `#PyTorch`, `#GPU scaling`, `#large language models`
 
 ---
 
 <a id="item-tech-news-2"></a>
-### [Orcas Airband：GPU 实时转写 KORS 航空波段](https://orcasairband.com/) ⭐️ 7.0/10
+### [上海通报交大医学院基因编辑事件调查结果](https://mp.weixin.qq.com/s/p0iC3tcI1yr10EBl2NjUvg) ⭐️ 8.0/10
 
-Orcas Airband 正在 KORS 提供全频段航空通信的实时监听与自动转写；作者在 Hacker News 讨论中说明，系统由 ETTUS B210 软件定义无线电和双 4090 主机组成，在 GPU 上用 CUDA 多相信道化器切分整个航空波段、解调并检测发射，再输出转录文本。评论者引用的 14:03 记录显示，飞行员询问温哥华地面停止时，对方确认“当时没有航班起飞或降落温哥华”；运营者贴出的 2143Z Victoria Ground 弱信号转录则提到通信问题导致交通暂停。转录未经编辑，评论者也指出部分传输十分模糊，因此这些内容只能作为监听参考。
+上海公布对上海交通大学医学院一起定制基因编辑疗法致死事件的调查结果。涉事患儿确诊 Snijders Blok-Campeau 综合征，家属 2023 年联系仇某某团队定制疗法，2025 年 3 月注射后死于血栓性微血管病，相关论文于 2026 年 2 月发表在《自然》。调查认定临床前研究、伦理审查和知情同意存在缺陷，部分人员收受家属财物约 106 万元；仇某某、杨某被开除并取消资格 5 年，相关机构被约谈整改并受行政处罚。
 
-hackernews · mmaunder · 11月13日 22:04 · [社区讨论](https://news.ycombinator.com/item?id=50490593)
+telegram · zaihuapd · 11月13日 09:24
 
-**「背景」** 航空波段是塔台、地面管制和区域管制之间进行无线电通话的频段；地面停机（ground stop）则指暂停航班起飞或落地。该项目的作者说明，系统用 Ettus B210 接收整个波段，并在双 RTX 4090 上通过 CUDA 多相信道化器分离信道、解调信号并转写通话，因此能把当时未编辑的原始通播记录下来。
+**「背景」** 基因编辑疗法在用于患者前，通常须完成临床前研究、通过伦理审查并取得知情同意，以评估安全性并保障受试者权益。此次事件涉及的是一种针对个别患者的定制基因编辑治疗，这类治疗不按标准化临床试验的常规入组路径推进，因此上述前置环节是否充分成为调查重点。
 
-**「影响」** 对希望实时了解 KORS 周边航空通信的爱好者，这套系统把整段 airband 的解调与转录集中到一个 GPU 流程中，可在事件发生时快速回看原始通话语境；但弱信号和未经校对的文本会限制可读性，不应被当作官方地面停止或管制指令的依据。
+**「影响」** 对开展个体化基因编辑疗法的研究机构和临床团队而言，这一调查将临床前研究、伦理审查和知情同意列为被追责的缺陷环节；涉事人员被开除并取消资格 5 年，机构被约谈整改和行政处罚。
 
-**「社区讨论」** 评论者 molsongolden 回翻到链接发布时的 14:03 记录，用飞行员与 Encore 3325 的问答确认温哥华地面停止；plipt 则称许多传输非常模糊，自己只能听懂约一半，并追问这些传输是否仍为模拟制式。
-
-**标签**: `#software-defined radio`, `#CUDA signal processing`, `#airband communications`, `#real-time transcription`, `#GPU computing`
+**标签**: `#gene editing`, `#research ethics`, `#clinical trials`, `#biotech regulation`, `#scientific misconduct`
 
 ---
 
 <a id="item-tech-news-3"></a>
-### [FAA 发布全国航班地面停飞令，数小时后解除](https://www.nbcnews.com/news/us-news/faa-orders-nationwide-ground-stop-departing-flights-reasons-safety-rcna609247) ⭐️ 7.0/10
+### [FAA 发布全国停飞令，故障原因仍未确认](https://www.nbcnews.com/news/us-news/faa-orders-nationwide-ground-stop-departing-flights-reasons-safety-rcna609247) ⭐️ 7.0/10
 
-美国联邦航空管理局（FAA）于 2026 年 11 月 13 日发布全国性地面停飞令，暂停离港航班；据社区评论中引述的《纽约时报》和 CNBC 报道，该停飞令随后已被解除。官方在报道时未完整说明原因，《华尔街日报》援引知情人士称，故障似乎影响由 L3Harris Technologies 运营的电信网络，该网络承载空管员与飞行员通信所用的关键无线电频率，但目前尚不清楚雷达数据是否同样受影响。评论者指出，事发时官方公开信息极为稀少，洛杉矶国际机场自约当地时间 10:30 起无航班起飞，肯尼迪机场离港状态几乎全为延误。
+美国联邦航空管理局（FAA）于 2026 年 11 月 13 日发布全国范围的停飞令，暂停出发航班。官方尚未完整说明原因；有评论引用《华尔街日报》的报道称，故障似乎影响由 L3Harris Technologies 负责的通信网络，该网络承载空管员与飞行员通话所需的关键无线电频率，但是否波及雷达数据仍不清楚。评论中的后续信息并不一致：有人引用《纽约时报》称停飞令已解除，也有人引用国土安全部官员的话称故障可能持续较长时间。
 
 hackernews · zulln · 11月13日 21:05 · [社区讨论](https://news.ycombinator.com/item?id=50489641)
 
-**「背景」** 全国性停飞令是 FAA 在通信或系统故障时采取的罕见措施；据 Alex Jones Live 汇总，上一次同类全国停飞发生在 2023 年 1 月，由 NOTAM 系统故障引发。此次事件中，《卫报》报道称停飞始于美东时间周五约下午 4 点，FAA 将原因归为“临时电信中断”，美国国土安全部长 Markwayne Mullin 则表示这不是恐怖主义。
+**「背景」** 此次停飞由通信故障触发：据 Al Jazeera 报道，故障影响全部 22 个区域空管中心；《卫报》援引知情人士称，受影响的是由 L3Harris Technologies 负责、用于空管员与飞行员通话的关键无线电网络。FAA 此前已宣布将 AI 航线管理工具 SMART 扩展至全国空域，但明确表示该工具只提供建议，不能取代空管员或接管飞机；社区中把两者联系起来的说法目前没有证据支持。
 
-**「运营影响」** 停飞令约四小时后解除，但已造成约 1.1 万架次航班延误或取消，航空公司和旅客需要应对解除后的恢复排队与重新调度。由于该指令覆盖全国所有离港航班，即便未直接受通信故障影响的机场也须先让航班留在地面，恢复运行时还需重新协调机组与航班时刻。
+**「实际影响」** 全国停飞直接打乱了计划从美国机场起飞的旅客行程：CNN 报道称，停飞期间航班取消数量持续上升，官方起初没有给出恢复时间；CNBC 随后报道，停飞约四小时后解除，但已影响数千架次离港航班。停飞令解除后，旅客仍需向航空公司确认航班状态，因为积压和取消不会立即消失。
 
-**「社区讨论」** 有评论者（sixhobbits）援引 FAA 11 月 10 日的声明，指出该机构刚宣布将 AI 空管工具 SMART 推广至全国 22 个空管中心，并据此猜测停飞与这次推广有关，但这只是未经证实的推测，评论中没有任何证据把两者联系起来。另一位评论者（Animats）则强调信息匮乏：部长仅在 X 上发文，媒体报道有限，而机场网站因过载无法显示离港信息。
+**「社区讨论」** 评论区对原因存在明显分歧：一种说法指向 L3Harris 负责的空管通信网络故障，另一种则猜测这与 FAA 近期宣布在全国 22 个中心推广的 AI 空管系统“SMART”有关，但后者只是未经证实的推测。也有评论抱怨官方信息稀少、机场出发信息显示不一致，并同时出现“停飞令已解除”和“可能延长”两种后续说法。
 
 <details><summary>参考链接</summary>
 <ul>
-<li><a href="https://www.alexjoneslive.com/2026/11/13/faa-issues-nationwide-ground-stop-due-to-extraordinary-circumstances/">FAA Issues Nationwide Ground Stop Due To... - Alex Jones Live</a></li>
+<li><a href="https://www.aljazeera.com/news/liveblog/2026/11/13/groundling-live">LIVE: FAA issues US ground stop , some international... | Al Jazeera</a></li>
 <li><a href="https://www.theguardian.com/us-news/live/2026/nov/13/us-politics-latest-news-updates-democrats-republicans-donald-trump-van-hollen-chuck-schumer">US flight outage live updates: FAA grounds thousands... | The Guardian</a></li>
-<li><a href="https://en.wikipedia.org/wiki/2026_FAA_communication_outage">2026 FAA communication outage - Wikipedia</a></li>
-<li><a href="https://www.cnbc.com/2026/11/13/faa-ground-stop.html">FAA lifts ground stop after four hours, but flight ... - CNBC</a></li>
-<li><a href="https://www.theguardian.com/world/2026/nov/13/faa-nationwide-ground-stop-flights">Nationwide FAA ground stop: nearly 11,000 flights delayed or ...</a></li>
+<li><a href="https://arstechnica.com/ai/2026/11/faa-expands-ai-advice-to-manage-air-traffic-congestion-across-entire-us-airspace/">FAA expands AI advice to manage air traffic ... - Ars Technica</a></li>
+<li><a href="https://gizmodo.com/the-faa-is-rolling-out-its-ai-air-traffic-tool-nationwide-2000839347">The FAA Is Rolling Out Its AI Air Traffic Tool Nationwide</a></li>
+<li><a href="https://www.cnn.com/2026/11/13/us/live-news/flights-ground-stop-faa">Live updates on FAA ground stop : No timeline for resolution as flight ...</a></li>
+<li><a href="https://www.cnbc.com/2026/11/13/faa-ground-stop.html">FAA lifts ground stop after four hours, but flight cancellations will...</a></li>
 
 </ul>
 </details>
 
-**标签**: `#FAA ground stop`, `#air traffic control`, `#critical infrastructure`, `#telecom outage`, `#AI in aviation`
+**标签**: `#FAA ground stop`, `#critical infrastructure`, `#air traffic control`, `#telecommunications outage`, `#AI-ATC speculation`
 
 ---
 
 <a id="item-tech-news-4"></a>
-### [Haskell 生态技术愿景文档引发讨论](https://discourse.haskell.org/t/a-technical-vision-for-the-haskell-ecosystem/15078) ⭐️ 7.0/10
+### [ICML 2027 拟推两阶段审稿与投稿配额](https://www.reddit.com/r/MachineLearning/comments/1xvkxbj/icml_2027_changes_d/) ⭐️ 7.0/10
 
-2026 年 11 月 13 日，Haskell 社区在 Discourse 发布了一份生态技术愿景文档，Hacker News 上的讨论集中在语言采用、工具链、AI 与调试。由于提供的材料没有披露具体提案、版本目标、时间表或兼容性条件，目前只能确认这是一份方向性讨论，而非已交付的能力或正式路线图承诺。
+一篇 Reddit 帖子根据 ICML 2027 征稿通知总结称，会议将采用两阶段审稿：由领域主席决定论文是否进入完整评审，任何第一阶段拒稿须经高级领域主席确认，作者可在 2 月 23 日前收到简短理由。投稿限制包括每人最多出现在 20 份投稿中、每篇论文须从作者名单中指定一名互惠审稿人且每位审稿人最多承担 6 篇、投稿达到 3 篇及以上者须加入程序委员会；不合规论文可能被直接拒稿。帖子特别提到，每位作者最多只能有一篇论文在作者中没有合格互惠审稿人，这被视为限制“挂名”投稿的关键变化；上述内容来自 Reddit 对 CFP 的转述，而非官方公告原文。
 
-hackernews · cosmic\_quanta · 11月13日 14:43 · [社区讨论](https://news.ycombinator.com/item?id=50484235)
+reddit · r/MachineLearning · /u/Gravitist · 11月13日 21:53
 
-**「背景」** Haskell Foundation 的技术领导委员会（technical leadership committee）在经历数周讨论、就生态愿景与策略达成一致后完成组建并进入正式运作，该委员会在公告中说明了这一进展（tool-1-1）。本次发布的《A technical vision for the Haskell ecosystem》即该委员会对外阐述这些方向的文件，因此相关讨论很快延伸到社区长期关注的问题：Haskell 能否用于桌面、移动与网页等通用应用开发，而不只停留在学术研究和零散的命令行工具上（tool-1-2）。
+**「背景」** ICML 是机器学习领域的主要学术会议，录用决定依赖程序委员会（PC）以及领域主席和高级领域主席的同行评审。随着投稿量持续膨胀，会议长期面临审稿人负担过重的问题；此次 2027 年征稿政策正是试图通过限制作者投稿数量和强制互惠审稿来缓解这一矛盾。
 
-**「影响」** 对 Haskell 开发者和工具维护者而言，目前没有已发布版本、兼容性变更或实施时间表可供评估，因此这份文档更适合作为方向讨论，而不是迁移或升级依据。
+**「影响」** 对作者而言，最直接的影响是提交前必须把“可审稿的合著者”当作配额来规划：每篇论文都要从作者名单中指定一名互惠审稿人，单名审稿人最多覆盖 6 篇；每位作者最多只能有一篇论文没有任何合格互惠审稿人，不合规论文可能被 desk reject。拥有 3 篇及以上投稿的作者还必须加入程序委员会，因此多投团队需要提前分配审稿人力，而不能只在截止日前临时加名。
 
-**「社区讨论」** 评论中，ecshafer 认为 Haskell 的简洁、token 效率和强安全特性可能适合 AI 生成代码，甚至把严格类型系统视为 agentic AI 的理想基础；pmkary 则遗憾 Haskell 尚未像 C、JavaScript 或 Rust 那样覆盖桌面、移动和 Web。georgewsinger 分享了为 Haskell VR 合成器加入实时单步调试的实践，称这类交互式调试在生态中被低估；KolmogorovComp 认为编译时间固然重要，但更应关注增量构建。
-
-<details><summary>参考链接</summary>
-<ul>
-<li><a href="https://discourse.haskell.org/t/a-technical-vision-for-the-haskell-ecosystem/15078">A technical vision for the Haskell ecosystem - Haskell Foundation...</a></li>
-<li><a href="https://news.ycombinator.com/item?id=50484235">A technical vision for the Haskell ecosystem | Hacker News</a></li>
-
-</ul>
-</details>
-
-**标签**: `#Haskell`, `#programming languages`, `#ecosystem strategy`, `#developer tooling`, `#open source`
+**标签**: `#ICML`, `#peer review`, `#ML research`, `#conference policy`, `#submission limits`
 
 ---
 
 <a id="item-tech-news-5"></a>
-### [Python 早期贡献者 Tim Peters 去世，享年 74 岁](https://x.com/Itsfoss/status/2120957452937998716) ⭐️ 7.0/10
+### [微软 Outlook、Teams 与 Copilot 全球宕机逾 12 小时](https://www.reuters.com/technology/microsoft-365-outlook-down-thousands-us-users-downdetector-shows-2026-11-12/) ⭐️ 7.0/10
 
-Python 创建者 Guido van Rossum 宣布，Python 社区早期贡献者 Tim Peters 去世，享年 74 岁。 Peters 是 Python 的第二位真实用户，也是 Timsort 排序算法的作者、《Python 之禅》（PEP 20）的撰写者，并曾在 Python 软件基金会董事会任职 13 年。 上述信息来自一个 Telegram 频道对社交媒体帖子的转述，其中引用了 Guido van Rossum 的声明；该条目未提供声明原文、去世日期或死因等进一步细节。
+微软 Outlook、Teams 和 Copilot 在 11 月 13 日仍处于宕机状态，故障已持续超过 12 小时，打乱全球企业与政府的通信。微软称原因是服务器问题，未发现恶意活动，并表示已扩大修复范围、看到回稳迹象。澳大利亚、日本和美国部分政府机构受到影响，Euronext 的邮件受阻，台湾有金融机构改用传真确认交易；这是 Microsoft 365 服务今年第二次中断。
 
-telegram · zaihuapd · 11月13日 09:55
+telegram · zaihuapd · 11月13日 12:21
 
-**「背景」** 《Python 之禅》最初是 Tim Peters 于 1999 年发在 Python 邮件列表上的一组设计原则，后来成为 PEP 20，并可通过在解释器中执行 \`import this\` 查看。Peters 在 Python 极早期以“玩票”方式加入，被描述为继 Guido van Rossum 之后 Python 的第二位真实用户，这段经历也解释了他为何能同时影响语言实现与社区规范。
+**「背景」** Outlook、Teams 和 Copilot 都属于 Microsoft 365 云端服务，服务端故障会同时影响邮件、协作和 AI 功能，而不只是单一客户端的问题。此次中断还波及 OpenAI 和 Anthropic 使用的微软连接器，OpenAI 表示正在排查新建连接失败和工具调用异常，显示依赖 Microsoft 365 的第三方 AI 服务也会被连带影响。
+
+**「影响」** 故障期间，部分机构启动了备用流程：台湾金融机构改用传真确认交易，Euronext 的邮件通信受阻。对依赖 Outlook、Teams 和 Copilot 的企业与政府用户而言，关键通信和协作需要准备降级方案，而不能只依赖 Microsoft 365。
 
 <details><summary>参考链接</summary>
 <ul>
-<li><a href="https://en.wikipedia.org/wiki/Zen_of_Python">Zen of Python - Wikipedia</a></li>
-<li><a href="https://news.ycombinator.com/item?id=50450488">Tim Peters has died | Hacker News</a></li>
+<li><a href="https://www.aljazeera.com/news/liveblog/2026/11/13/live-microsoft-struggles-to-restore-services-as-outage-hits-global-users">Microsoft outage live: Global users affected as services... | Al Jazeera</a></li>
+<li><a href="https://www.theguardian.com/technology/2026/nov/13/microsoft-outage-outlook-teams-word-excel-reports">Microsoft scrambles to fix global outage affecting Teams and Outlook</a></li>
 
 </ul>
 </details>
 
-**标签**: `#Python`, `#open source`, `#software community`, `#obituary`, `#Tim Peters`
+**标签**: `#Microsoft 365`, `#outage`, `#cloud reliability`, `#enterprise software`, `#incident response`
 
 ---
 
 <a id="item-tech-news-6"></a>
-### [微软 Outlook、Teams 与 Copilot 全球宕机逾 12 小时](https://www.reuters.com/technology/microsoft-365-outlook-down-thousands-us-users-downdetector-shows-2026-11-12/) ⭐️ 7.0/10
+### [DeepSeek 开放应用 API，整合搜索、文件与语音](https://mp.weixin.qq.com/s/78KBHc4-4N5b2vfL9SkutQ) ⭐️ 7.0/10
 
-11 月 13 日，微软 Outlook、Teams 和 Copilot 的全球服务中断持续超过 12 小时，打乱全球企业与政府的通信。微软将故障归因于服务器问题，称未发现恶意活动，并表示已扩大修复范围且出现回稳迹象。澳大利亚、日本和美国部分政府机构受到影响，Euronext 邮件受阻，台湾有金融机构改用传真确认交易；这是微软 365 服务今年第二次中断。
-
-telegram · zaihuapd · 11月13日 12:21
-
-**「背景」** Microsoft 365 是将 Outlook、Teams、Copilot 等应用集中承载在微软云端的订阅服务，因此服务器端的单点故障可能同时波及多项服务和多个地区。源报道指出，这已是微软 365 服务今年第二次中断，说明同类故障并非首次发生。
-
-**「实际影响」** 依赖 Microsoft 365 的机构在邮件、协作和交易确认环节受到直接冲击：部分政府机构通信受阻，Euronext 邮件受影响，台湾有金融机构改用传真确认交易。对这类组织而言，长时间云服务中断期间需要可用的替代通信与交易确认渠道。
-
-**标签**: `#Microsoft 365`, `#cloud outage`, `#reliability`, `#enterprise software`, `#Copilot`
-
----
-
-<a id="item-tech-news-7"></a>
-### [DeepSeek 开放应用 API：多项能力可单独调用](https://mp.weixin.qq.com/s/78KBHc4-4N5b2vfL9SkutQ) ⭐️ 7.0/10
-
-DeepSeek 开放了面向应用的“全家桶”API，开发者在原有 API 中开启对应参数后，即可获得深度思考搜索、文件输入、阅读链接和语音等对话能力，服务端会自动完成工具调用与上下文拼接。V4.1-Flash 模型已在三个接口中支持这些能力；Search、Fetch、OCR、ASR、TTS 也可分别单独调用。官方同时开源了前端 Demo，支持导入历史对话，让开发者基于 API 在本地部署并使用 DeepSeek 网页端。
+DeepSeek 面向开发者开放应用型 API：在原有 API 中开启对应参数，即可获得深度思考搜索、文件输入、阅读链接和语音等对话能力，工具调用与上下文拼接由服务端自动完成。V4.1-Flash 模型已在三个接口中支持这些能力；Search、Fetch、OCR、ASR、TTS 也可单独调用，官方同时开源了可导入历史对话的前端 Demo（deepseek-ai/chat-demo）。上述内容来自 Telegram 转发，尚缺独立验证和更完整的技术细节。
 
 telegram · zaihuapd · 11月13日 14:27
 
-**「背景」** DeepSeek 原有 API 已提供模型调用入口；若要把搜索、文件、链接或语音接入对话应用，开发者通常还需自行串联工具并维护上下文。此次更新将这类应用层能力做成 API 参数，由服务端完成工具调用与上下文拼接，使现有接口可直接承载更完整的对话流程。
+**「背景」** 所谓应用型 API，是把搜索、网页抓取、OCR、语音识别与合成等工具放到服务端编排；开发者只需在原有对话接口中开启参数，不必自行串接各项服务。DeepSeek 官方文档称，App 背后的这些能力现已通过 API 提供，OCR、ASR、TTS 也可单独调用。
 
-**「对开发者的影响」** 现有接入方无需自行搭建搜索、抓取、OCR、ASR、TTS 等流水线，在原有 API 中开启对应参数即可由服务端完成工具调用与上下文拼接；有自定义流程需求时，也可以把这五项服务单独调用。官方同时开源了可导入历史对话的前端 Demo，便于将网页端聊天体验本地部署，但 API 文档单独列出了定价页面，使用这些内置工具前需先确认计费方式。
+**「影响」** 开发者可以直接调用组合 API 获得搜索、文件读取和语音能力，也可按需单独调用 Search、Fetch、OCR、ASR、TTS，减少自行拼接多条能力链路的工程量。接入时需按不同接口和参数启用相应能力，现有 API 集成应检查与 V4.1-Flash 三个接口的兼容性；开源的 chat-demo 还提供了导入历史对话并将其用于本地部署网页端的路径。
 
 <details><summary>参考链接</summary>
 <ul>
@@ -175,76 +142,80 @@ telegram · zaihuapd · 11月13日 14:27
 </ul>
 </details>
 
-**标签**: `#DeepSeek`, `#AI APIs`, `#multimodal`, `#tool calling`, `#open source`
+**标签**: `#DeepSeek`, `#AI APIs`, `#multimodal AI`, `#tool calling`, `#open-source demo`
 
 ---
 
-<a id="item-tech-news-8"></a>
-### [OpenAI 推出 ChatGPT Wallet，支持智能体令牌化支付](https://openai.com/index/introducing-chatgpt-wallet/) ⭐️ 7.0/10
+<a id="item-tech-news-7"></a>
+### [OpenAI 推出 ChatGPT Wallet，支持美国 Pro 用户智能体支付](https://openai.com/index/introducing-chatgpt-wallet/) ⭐️ 7.0/10
 
-OpenAI 宣布推出 ChatGPT Wallet，让 ChatGPT 智能体在不接触用户真实卡号的情况下付款：支付网络下发替代卡号的支付令牌，用户需逐笔核对商品与金额，并通过 Face ID 或指纹确认。发布信息称，该功能即日起在美国向 18 岁以上的 ChatGPT Pro 订阅用户开放，且需使用美国发行的银行卡，合作方包括美国运通、万事达和 Visa。来源提到开放渠道为“dots”，但未说明其具体含义；目前也没有独立测试、采用规模或性能数据可供验证。
+OpenAI 宣布推出 ChatGPT Wallet，并表示即日起在美国向 18 岁以上的 ChatGPT Pro 订阅用户开放，且用户需使用美国发行的银行卡。该钱包与美国运通、万事达和 Visa 合作，支付网络向智能体下发替代真实卡号的支付令牌，使智能体付款时无需接触用户的真实卡号。每笔购买前，用户要在 ChatGPT 内核对商品和金额，并通过 Face ID 或指纹完成验证。
 
 telegram · zaihuapd · 11月13日 15:43
 
-**「背景」** ChatGPT Wallet 不是一张新银行卡，而是叠加在用户已有美国发行卡上的支付层；持卡人保留原有信用卡奖励。它面向 OpenAI 的 dots 智能体，交易仍走美国运通、万事达和 Visa 的现有卡网络，由支付网络下发替代真实卡号的支付令牌。
+**「背景」** ChatGPT Wallet 面向的是智能体代为结账的场景：由代理发起购买，用户再逐笔授权，因此支付凭证不能直接暴露真实卡号。卡组织的网络令牌化会用替代值取代卡号，降低代理链路泄露卡信息的风险。OpenAI 表示该钱包与运通、万事达和 Visa 合作，初期通过 dots 面向美国 ChatGPT Pro 订阅者开放。
 
-**「使用影响」** 对符合条件的美国 ChatGPT Pro 用户而言，代理购物被限制在逐笔确认流程内：每笔交易都需核对商品与金额，并通过 Face ID 或指纹批准，因此无法实现完全无人值守的自动下单。该功能目前仅面向 18 岁以上、持有美国发行卡的 Pro 订阅者，境外用户及其他卡种暂不可用。
+**「影响」** 按当前流程，逐笔生物识别确认意味着智能体无法在用户不参与的情况下完成购买；用户每次支付都必须到场核对商品和金额，安全性与自动化便利性因此需要权衡。
 
 <details><summary>参考链接</summary>
 <ul>
-<li><a href="https://tech.yahoo.com/ai/chatgpt/articles/openai-introduces-chatgpt-wallet-visa-162102250.html">OpenAI Introduces ChatGPT Wallet With Visa, Mastercard, Amex ...</a></li>
-<li><a href="https://www.cnbc.com/2026/11/13/openai-chatgpt-wallet-dot-purchases.html">OpenAI&#x27;s ChatGPT Wallet allows &#x27;dots&#x27; AI agents to ... - CNBC</a></li>
-<li><a href="https://cointelegraph.com/news/openai-ai-payments-chatgpt-wallet-visa-mastercard-amex">OpenAI Launches ChatGPT Wallet for AI Agent Payments</a></li>
-<li><a href="https://www.cnbc.com/2026/11/13/openai-chatgpt-wallet-dot-purchases.html">OpenAI&#x27;s ChatGPT Wallet allows &#x27;dots&#x27; AI agents to make purchases</a></li>
-<li><a href="https://techcrunch.com/2026/11/13/chatgpts-new-wallet-lets-ai-agents-shop-and-check-out-for-you/">ChatGPT&#x27;s new Wallet lets AI agents shop and check out for ...</a></li>
-<li><a href="https://www.reuters.com/technology/openai-launches-chatgpt-wallet-letting-ai-agents-pay-purchases-2026-11-13/">OpenAI launches ChatGPT Wallet, letting AI agents pay for ...</a></li>
+<li><a href="https://openai.com/index/introducing-chatgpt-wallet/">Introducing ChatGPT Wallet | OpenAI</a></li>
 
 </ul>
 </details>
 
-**标签**: `#openai`, `#ai-agents`, `#agentic-commerce`, `#payments`, `#fintech`
+**标签**: `#OpenAI`, `#AI agents`, `#payments`, `#fintech`, `#security`
 
 ---
 
 ## 财经新闻
 
 <a id="item-finance-news-1"></a>
-### [卢特尼克之子执掌的坎托削减英伟达持股近半，引发利益冲突质疑](https://www.cnbc.com/2026/11/13/howard-lutnick-nvidia-jensen-huang-china-cantor-fitzgerald.html) ⭐️ 8.0/10
+### [卢特尼克因英伟达芯片走私审查受质疑，其子领导公司申报持股近减半](https://www.cnbc.com/2026/11/13/howard-lutnick-nvidia-jensen-huang-china-cantor-fitzgerald.html) ⭐️ 8.0/10
 
-CNBC 11 月 13 日报道，由美国商务部长霍华德·卢特尼克的两个儿子领导的坎托·菲茨杰拉德，在 2025 年 9 月至 2026 年 3 月间将其申报的英伟达持股数量减少近 50%，同期仍为英伟达的业务伙伴安排融资，并与英伟达管理层保持密切联系。报道称这引发利益冲突质疑，但明确表示没有证据显示卢特尼克泄露非公开信息，或持股变化与情报警告有关。
+美国商务部长霍华德·卢特尼克因据 Axios 报道曾多次抵制对疑似英伟达芯片走私中国的打击而面临审视；CNBC 分析证券申报文件发现，他此前经营、现由其子布兰登和凯尔领导的 Cantor Fitzgerald 在 2025 年 9 月至 2026 年 3 月间申报的英伟达持股数量下降 49%，从逾 350 万股降至 178 万股（不含期权），但 Cantor 称其在英伟达的自营头寸规模不大，而申报中的头寸与客户互换交易有关。英伟达 CEO 黄仁勋于周四辞职。
 
 rss · CNBC Finance · 11月13日 23:42
 
-**「背景」** 坎托·菲茨杰拉德曾由卢特尼克领导；他于 2025 年 2 月出任商务部长，该部门负责美国出口管制，而他的儿子布兰登和凯尔目前执掌公司。
+**「背景」** 美国自 2022 年起以国家安全为由限制对华出口最先进人工智能芯片，但这类出口管制一直难以执行。据 NBC News 报道，英伟达 CEO 黄仁勋在出现涉及与中国疑似间谍的婚外情报道后辞职，令商务部长鲁特尼克及其子所领导的 Cantor Fitzgerald 与英伟达的关系再受审视。
 
-**标签**: `#Nvidia`, `#Howard Lutnick`, `#Cantor Fitzgerald`, `#China export controls`, `#conflict of interest`
+<details><summary>参考链接</summary>
+<ul>
+<li><a href="https://www.bbc.com/news/articles/c67429m3vem3o">How a sex scandal at Nvidia is putting pressure on the White House</a></li>
+<li><a href="https://www.cnbc.com/2026/11/13/howard-lutnick-nvidia-jensen-huang-china-cantor-fitzgerald.html">Howard Lutnick’s sons’ Nvidia ties amid Jensen Huang China spy ...</a></li>
+<li><a href="https://www.nbcnews.com/tech/tech-news/nvidia-ceo-jensen-huang-resigns-reports-extramarital-relationships-rcna608402">Nvidia CEO Jensen Huang resigns after reports of affair and...</a></li>
+
+</ul>
+</details>
+
+**标签**: `#Nvidia`, `#Howard Lutnick`, `#Cantor Fitzgerald`, `#US-China export controls`, `#conflict of interest`
 
 ---
 
 <a id="item-finance-news-2"></a>
-### [芝加哥联储主席古尔斯比：通胀问题上美联储“肯定还有工作要做”](https://www.cnbc.com/2026/11/13/chicago-feds-goolsbee-says-central-bank-has-definitely-got-work-to-do-on-inflation.html) ⭐️ 7.0/10
+### [芝加哥联储古尔斯比：美联储在通胀问题上“肯定还有工作要做”](https://www.cnbc.com/2026/11/13/chicago-feds-goolsbee-says-central-bank-has-definitely-got-work-to-do-on-inflation.html) ⭐️ 7.0/10
 
-芝加哥联储主席古尔斯比 11 月 13 日表示，美联储“肯定还有工作要做”，才能继续重建其公信力。此前公布的 10 月生产者价格指数（PPI）同比上涨 6.5%，为 2022 年 11 月以来最高。
+芝加哥联储主席古尔斯比 11 月 13 日表示，美联储在通胀问题上“肯定还有工作要做”，需要继续重建公信力；此前公布的 10 月生产者价格指数（PPI，批发价格指标）同比上涨 6.5%，为 2022 年 11 月以来最高。市场已完全计入美联储在 12 月 8 日至 9 日会议上加息 25 个基点的预期。
 
 rss · CNBC Finance · 11月13日 14:22
 
-**「背景」** 被视为批发价格指标的 PPI 10 月环比上涨 0.3%，加上本周稍早公布的消费者价格指数（CPI）涨幅高于预期，古尔斯比称通胀已近六年高于美联储 2%的目标，近期“没有取得任何进展”。他目前不是联邦公开市场委员会（FOMC）的投票委员，2027 年才拥有投票权；市场则完全计入 12 月 8-9 日会议加息 25 个基点。
+**「背景」** 美联储的通胀目标是 2%，古尔斯比称通胀已近六年高于该目标、近期没有进展；他目前不是联邦公开市场委员会（FOMC）投票委员，2027 年才拥有投票权。
 
-**标签**: `#Federal Reserve`, `#inflation`, `#producer price index`, `#monetary policy`, `#interest rates`
+**标签**: `#Federal Reserve`, `#inflation`, `#PPI`, `#interest rates`, `#monetary policy`
 
 ---
 
 <a id="item-finance-news-3"></a>
-### [黄仁勋辞职与涉华间谍指控或加剧美中出口管制紧张](https://www.cnbc.com/2026/11/13/jensen-huang-nvidia-us-china-relations.html) ⭐️ 7.0/10
+### [黄仁勋辞职引发美中芯片管制收紧担忧](https://www.cnbc.com/2026/11/13/jensen-huang-nvidia-us-china-relations.html) ⭐️ 7.0/10
 
-英伟达首席执行官黄仁勋周四辞职，并同意在 11 月 26 日前就一项涉及其婚外情对象的中国间谍指控赴美国国会作证；该间谍指控仍属未经证实的报道。分析人士预计，这一事件可能促使美国国会在年底前收紧对华出口管制，并令脆弱的美中贸易休战更趋紧张。
+英伟达 CEO 黄仁勋在国会审查其与一名被指为中国间谍的女性的婚外情期间辞职，并同意在 11 月 26 日前作证；分析人士预计，这可能促使美国在 2026 年底前进一步收紧对华芯片出口管制。
 
 rss · CNBC Finance · 11月13日 02:56
 
-**「背景」** 美国自 2022 年起限制英伟达向中国出售先进芯片，特朗普政府则在 2025 年放宽了多项拜登时期的限制；黄仁勋此前主张美国技术需在中国使用才能保持全球竞争力，两国目前依赖一项脆弱的贸易休战。
+**「背景」** 美国自 2022 年起限制英伟达向中国出售先进芯片，特朗普政府 2025 年放宽了部分拜登时期限制，两国目前维持脆弱的贸易休战。
 
-**「影响」** 若国会如分析人士预测在年底前收紧出口管制，英伟达对华销售及依赖美国芯片的中国企业可能直接受冲击，分析人士还警告北京可能以稀土或芯片制造材料供应反制。
+**「影响」** 分析人士警告，若国会收紧管制，中国科技企业获取美国先进芯片将更困难，北京也可能以限制稀土或芯片制造材料供应作为反制。
 
-**标签**: `#Nvidia`, `#Jensen Huang`, `#US-China relations`, `#export controls`, `#semiconductors`
+**标签**: `#US-China relations`, `#Nvidia`, `#semiconductor export controls`, `#Congressional scrutiny`, `#AI competition`
 
 ---
