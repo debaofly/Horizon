@@ -16,19 +16,15 @@
   },
   "processing": {
     "profiles_dir": "profiles",
-    "default_profile": "tech-news",
+    "default_profile": "ai-creator",
     "profile_settings": {
-      "tech-news": {
-        "threshold": 5.5,
+      "ai-creator": {
+        "threshold": 5.0,
         "topic_dedup": true
       },
       "tech-blog": {
         "threshold": 4.0,
         "topic_dedup": false
-      },
-      "finance-news": {
-        "threshold": 7.0,
-        "topic_dedup": true
       }
     }
   },
@@ -38,35 +34,35 @@
         "type": "user_events",
         "username": "karpathy",
         "enabled": true,
-        "profile": "tech-news"
+        "profile": "ai-creator"
       },
       {
         "type": "repo_releases",
         "owner": "vllm-project",
         "repo": "vllm",
         "enabled": true,
-        "profile": "tech-news"
+        "profile": "ai-creator"
       },
       {
         "type": "repo_releases",
         "owner": "sgl-project",
         "repo": "sglang",
         "enabled": true,
-        "profile": "tech-news"
+        "profile": "ai-creator"
       },
       {
         "type": "repo_releases",
         "owner": "triton-lang",
         "repo": "triton",
         "enabled": true,
-        "profile": "tech-news"
+        "profile": "ai-creator"
       }
     ],
     "hackernews": {
       "enabled": true,
       "fetch_top_stories": 30,
       "min_score": 150,
-      "profile": "tech-news"
+      "profile": "ai-creator"
     },
     "rss": [
       {
@@ -74,14 +70,14 @@
         "url": "https://simonwillison.net/atom/everything/",
         "enabled": true,
         "category": "ai-tools",
-        "profile": "tech-news"
+        "profile": "ai-creator"
       },
       {
         "name": "vLLM Blog",
         "url": "https://vllm.ai/blog/rss.xml",
         "enabled": true,
         "category": "llm-inference",
-        "profile": "tech-blog",
+        "profile": "ai-creator",
         "content_extractor": "trafilatura"
       },
       {
@@ -95,9 +91,9 @@
       {
         "name": "CNBC Finance",
         "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664",
-        "enabled": true,
+        "enabled": false,
         "category": "finance",
-        "profile": "finance-news",
+        "profile": "ai-creator",
         "content_extractor": "trafilatura"
       },
       {
@@ -105,21 +101,45 @@
         "url": "https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml",
         "enabled": true,
         "category": "github-trending",
-        "profile": "tech-news"
+        "profile": "ai-creator"
       },
       {
         "name": "Semianalysis",
         "url": "https://newsletter.semianalysis.com/feed",
         "enabled": true,
         "category": "semiconductors",
-        "profile": "tech-news"
+        "profile": "ai-creator"
       },
       {
         "name": "LWN.net",
         "url": "https://lwn.net/headlines/full_text?key=${LWN_KEY}",
         "enabled": false,
         "category": "linux-kernel",
-        "profile": "tech-news"
+        "profile": "ai-creator"
+      },
+      {
+        "name": "OpenAI News",
+        "url": "https://openai.com/news/rss.xml",
+        "enabled": true,
+        "category": "ai-company",
+        "profile": "ai-creator",
+        "content_extractor": "trafilatura"
+      },
+      {
+        "name": "Google DeepMind Blog",
+        "url": "https://deepmind.google/blog/rss.xml",
+        "enabled": true,
+        "category": "ai-research",
+        "profile": "ai-creator",
+        "content_extractor": "trafilatura"
+      },
+      {
+        "name": "Hugging Face Blog",
+        "url": "https://huggingface.co/blog/feed.xml",
+        "enabled": true,
+        "category": "ai-tools",
+        "profile": "ai-creator",
+        "content_extractor": "trafilatura"
       }
     ],
     "reddit": {
@@ -132,7 +152,7 @@
           "time_filter": "day",
           "fetch_limit": 10,
           "min_score": 60,
-          "profile": "tech-news"
+          "profile": "ai-creator"
         },
         {
           "subreddit": "LocalLLaMA",
@@ -141,7 +161,7 @@
           "time_filter": "day",
           "fetch_limit": 10,
           "min_score": 60,
-          "profile": "tech-news"
+          "profile": "ai-creator"
         }
       ],
       "users": [],
@@ -154,7 +174,9 @@
           "channel": "zaihuapd",
           "enabled": true,
           "fetch_limit": 20,
-          "profile": ["tech-news", "finance-news"]
+          "profile": [
+            "ai-creator"
+          ]
         }
       ]
     }
@@ -165,9 +187,8 @@
   "digest": {
     "max_items": null,
     "profile_order": [
-      "tech-news",
-      "tech-blog",
-      "finance-news"
+      "ai-creator",
+      "tech-blog"
     ],
     "category_groups": {},
     "default_group": "other",
